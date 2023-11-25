@@ -23,16 +23,16 @@ class User:
         self.base_path = base_path
     
         self.map_of_func = {
-            "likes": [self.client.get_user_likes, "user", "likes"],
-            "comments": [],
-            "followers": [],
-            "following": [],
-            "albums": [],
-            "playlists": [],
-            "related_artists": [],
-            "reposts": [],
-            "streams": [],
-            "tracks": [],
+            "likes": [True, self.client.get_user_likes, "user", "likes"],
+            "comments": [True, self.client.get_user_comments, "comment", "comments"],
+            "followers": [True, self.client.get_user_followers, "user", "followers"],
+            "following": [True, self.client.get_user_following, "user", "following"],
+            "albums": [True, self.client.get_user_albums, "album", "albums"],
+            "playlists": [True, self.client.get_user_playlists, "playlist", "playlists"],
+            "related_artists": [self.client.get_user_related_artists, "user", "related_artists"],
+            # "reposts": [self.client.get_user_reposts, ""],
+            # "streams": [self.client.get_user_],
+            "tracks": [self.client.get_user_tracks, "track", "tracks"],
         }
     
     async def get_(self, func, type_of_columns, dir):
