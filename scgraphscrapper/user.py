@@ -7,7 +7,7 @@ import os
 
 features = get_scrap_features()
 
-class User:
+class CollectUser:
     def __init__(
         self, 
         client, 
@@ -21,7 +21,7 @@ class User:
             self.user_id = user_id
         
         self.base_path = base_path
-    
+        self.client = client
         self.map_of_func = {
             "likes": [self.client.get_user_likes, "user", "likes"],
             "comments": [self.client.get_user_comments, "comment", "comments"],
