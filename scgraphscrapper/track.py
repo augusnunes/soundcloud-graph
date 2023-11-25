@@ -7,7 +7,7 @@ import os
 
 features = get_scrap_features()
 
-class ScrapTrack:
+class CollectTrack:
     def __init__(
         self, 
         client, 
