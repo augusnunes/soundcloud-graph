@@ -3,7 +3,7 @@ from .collectors.tag import CollectTag
 from .collectors.track import CollectTrack
 from .collectors.user import CollectUser
 
-from utils import get_client
+from .utils import get_client
 import os 
 import asyncio
 
@@ -11,6 +11,8 @@ class SoundCloudGraph:
     def __init__(self,  base_path):
         self.client = get_client() 
         self.base_path = base_path
+        if not os.path.exists(self.base_path):
+            os.makedirs(self.base_path)
     
     def collect_user(self, user_id, columns=[], permalink=None):
         user = CollectUser(
