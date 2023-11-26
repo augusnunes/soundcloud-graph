@@ -1,12 +1,11 @@
 import typing as t
-from utils import get_scrap_features
+from .params import get_config
 import asyncio
-from operator import itemgetter
+from operator import attrgetter
 import pandas as pd 
 import os 
 from soundcloud.resource.track import BasicTrack
 
-features = get_scrap_features()
 
 class CollectPlaylist:
     def __init__(
@@ -23,18 +22,25 @@ class CollectPlaylist:
             "reposters": [self.client.get_playlist_reposters, "user", "reposters"],
             "tracks": self.get_tracks
         }
+        for i in self.map_of_func.keys():
+            os.makedirs(
+                os.path.join(
+                    self.base_path,
+                    i
+                )
+            )
     
     async def get_(self, func, type_of_columns, dir):
         list_of_elements = await list(func(self.playlist_id))
         pd.DataFrame(
-            [list(itemgetter(*features[type_of_columns]["list_columns"])(element.__dict__)) for element in list_of_elements],
-            columns=features[type_of_columns]["list_columns"],
+            [list(attrgetter(*get_config()[type_of_columns])(element.__dict__)) for element in list_of_elements],
+            columns=get_config()[type_of_columns],
         ).to_csv(os.path.join(self.base_path, dir, f"{self.playlist_id}.csv"), index=False)
 
     async def get_tracks(self):
         list_of_tracks = self.client.get_playlist(self.playlist_id).tracks
         pd.DataFrame(
-            [list(itemgetter(*features["track"]["list_columns"])(track.__dict__)) for track in list_of_tracks if isinstance(track, BasicTrack)]
+            [list(attrgetter(*get_config()["track"])(track.__dict__)) for track in list_of_tracks if isinstance(track, BasicTrack)]
         ).to_csv(os.path.join(self.base_path, "tracks", f"{self.playlist_id}.csv"), index=False)
         
     async def get_data(self, *string_functions):

@@ -1,11 +1,10 @@
 import typing as t
-from utils import get_scrap_features
+from .params import get_config
 import asyncio
-from operator import itemgetter
+from operator import attrgetter
 import pandas as pd 
 import os 
 
-features = get_scrap_features()
 
 class CollectTag:
     def __init__(
@@ -17,12 +16,18 @@ class CollectTag:
         self.tag = tag
         self.client = client
         self.base_path = base_path
-    
+
     async def get_recent_tracks(self):
+        os.makedirs(
+            os.path.join(
+                self.base_path,
+                "recent_tracks"
+            )
+        )
         list_of_recent_tracks = await list(self.client.get_tag_tracks_recent(self.tag))
         pd.DataFrame(
-            [list(itemgetter(*features["track"]["list_columns"])(track.__dict__)) for track in list_of_recent_tracks],
-            columns=features["track"]["list_columns"],
+            [list(attrgetter(*get_config()["track"])(track.__dict__)) for track in list_of_recent_tracks],
+            columns=get_config()["track"],
         ).to_csv(os.path.join(self.base_path, "recent_tracks", f"{self.user_id}.csv"), index=False)
 
     

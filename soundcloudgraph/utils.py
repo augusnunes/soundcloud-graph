@@ -53,13 +53,3 @@ def download_musics(
         download_url(client, **python_args)
     
     
-def get_scrap_features():
-    config = configparser.ConfigParser()
-    with pathlib.Path("config.cfg") as config_file:
-        config.read_file(
-            open(
-                config_file,
-                encoding="UTF-8"
-            )
-        )
-    return config 

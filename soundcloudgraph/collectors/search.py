@@ -1,11 +1,14 @@
 import typing as t
-from utils import get_scrap_features
+from .params import get_config
 import asyncio
-from operator import itemgetter
+from operator import attrgetter
 import pandas as pd 
 import os 
 
-features = get_scrap_features()
+
+__all__ = [
+    "CollectSearch"
+]
 
 class CollectSearch:
     def __init__(
