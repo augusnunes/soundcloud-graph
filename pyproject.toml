@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "soundcloud-graph-scrapper"
+name = "soundcloud-graph"
 version = "0.1.0"
 description = ""
 authors = ["Augusto Nunes <nunes.augusto19@gmail.com>"]
@@ -10,6 +10,8 @@ python = "^3.10"
 scdl = "^2.7.3"
 numpy = "^1.26.2"
 pandas = "^2.1.3"
+tqdm = "^4.66.1"
+p-tqdm = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
 
