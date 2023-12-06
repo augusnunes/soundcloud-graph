@@ -17,7 +17,7 @@ class SoundCloudGraph:
     def collect_user(self, user_id, columns=[], permalink=None):
         user = CollectUser(
             self.client, 
-            user_id, 
+            str(user_id), 
             os.path.join(self.base_path, "users"),
             permalink=permalink   
         )
@@ -28,7 +28,7 @@ class SoundCloudGraph:
         users = [
             CollectUser(
                 self.client, 
-                user_id, 
+                str(user_id), 
                 os.path.join(self.base_path, "users") 
             ) for user_id in user_ids
         ]
@@ -42,23 +42,26 @@ class SoundCloudGraph:
     def collect_playlist(self, playlist_id, columns=[]):
         playlist = CollectPlaylist(
             self.client, 
-            playlist_id,
+            str(playlist_id),
             os.path.join(self.base_path, "playlist")
         )
         asyncio.run(playlist.get_data(*columns))
+    
+    async def create_coroutine(self, funcs):
+        return await asyncio.gather(
+                *funcs
+            )
     
     def collect_playlists(self, playlist_ids, columns=[]):
         playlists = [
             CollectPlaylist(
                 self.client, 
-                playlist_id,
+                str(playlist_id),
                 os.path.join(self.base_path, "playlist")
             ) for playlist_id in playlist_ids
         ]
         asyncio.run(
-            asyncio.gather(
-                *[playlist.get_data(*columns) for playlist in playlists]
-            )
+            self.create_coroutine([playlist.get_data(*columns) for playlist in playlists])
         )
     
     def collect_tag(self, tag_query):
@@ -86,7 +89,7 @@ class SoundCloudGraph:
     def collect_track(self, track_id, columns=[]):
         track_c = CollectTrack(
             self.client,
-            track_id,
+            str(track_id),
             os.path.join(self.base_path, "track")
         )
         asyncio.run(track_c.get_data(*columns))
@@ -96,7 +99,7 @@ class SoundCloudGraph:
         tracks_c = [
             CollectTrack(
                 self.client,
-                track_id,
+                str(track_id),
                 os.path.join(self.base_path, "track")
             ) for track_id in track_ids
         ] 

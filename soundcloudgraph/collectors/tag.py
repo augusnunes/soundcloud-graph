@@ -16,17 +16,20 @@ class CollectTag:
         self.tag = tag
         self.client = client
         self.base_path = base_path
-
-    async def get_recent_tracks(self):
-        os.makedirs(
-            os.path.join(
-                self.base_path,
-                "recent_tracks"
+        
+        if not os.path.exists(os.path.join(self.base_path,"recent_tracks")):
+            os.makedirs(
+                os.path.join(
+                    self.base_path,
+                    "recent_tracks"
+                )
             )
-        )
-        list_of_recent_tracks = await list(self.client.get_tag_tracks_recent(self.tag))
+        
+    async def get_recent_tracks(self):
+        
+        list_of_recent_tracks = await asyncio.to_thread(list, self.client.get_tag_tracks_recent(self.tag))
         pd.DataFrame(
-            [list(attrgetter(*get_config()["track"])(track.__dict__)) for track in list_of_recent_tracks],
+            [list(attrgetter(*get_config()["track"])(track)) for track in list_of_recent_tracks],
             columns=get_config()["track"],
         ).to_csv(os.path.join(self.base_path, "recent_tracks", f"{self.user_id}.csv"), index=False)
 

@@ -1,3 +1,8 @@
+# from operator import attrgetter
+# TODO
+# colocar como attrgetter
+
+
 def get_config():
     params = {
         "user":[
@@ -42,6 +47,16 @@ def get_config():
             "track.id", 
             "track.user_id", 
         ],
+        "tracklike":[
+            "created_at",
+            "track.id", 
+            "track.user_id",
+        ],
+        "playlistlike":[
+            "created_at",
+            "playlist.id",
+            "playlist.user_id",
+        ],
         "playlist": [
             "id", 
             "created_at", 
@@ -83,14 +98,17 @@ def get_config():
         "repost": [
             "created_at",
             "caption",
-            "track.id",
-            "track.user_id",
             "user.id",
             "track.user.id"
+            "track.id",
+            "track.user_id",
         ],
         "stream": [
             "created_at",
-            ""
+            "media",
+            "is_repost",
+            "media_id",
+            "media_artist_id"
         ]
     }
     return params
